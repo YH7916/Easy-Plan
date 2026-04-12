@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "plan"
+version = "0.1.0"
+requires-python = ">=3.11"
+dependencies = [
+    "click>=8.1",
+    "anthropic>=0.25",
+    "python-dotenv>=1.0",
+    "tomli-w>=1.0",
+]
+
+[project.optional-dependencies]
+ticktick = ["ticktick-py>=0.3"]
+dev = ["pytest>=8", "pytest-mock>=3.12"]
+
+[project.scripts]
+plan = "plan.cli:cli"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["plan*"]

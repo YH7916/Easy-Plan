@@ -1,0 +1,28 @@
+[ai]
+provider = "claude"
+model = "claude-sonnet-4-6"
+api_key_env = "ANTHROPIC_API_KEY"
+
+[schedule]
+daily_time = "08:00"
+enabled = true
+run_on_missed = true
+
+[sources.ticktick]
+enabled = false
+writable = true
+username = ""
+password_env = "TICKTICK_PASSWORD"
+
+[sources.school]
+enabled = false
+cli_command = "zlb homework list --json"
+writable = false
+
+[paths]
+profile = "data/profile.md"
+context = "data/context.md"
+tasks = "data/tasks.json"
+
+[projects]
+areas = []
