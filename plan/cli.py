@@ -150,5 +150,103 @@ def task_done(task_id_prefix):
     click.echo(f"Done: {result['title']}")
 
 
+@cli.command()
+def sync():
+    """Bidirectional sync with all writable sources (e.g. TickTick)."""
+    from plan.config import get_config
+    from plan.sources import load_sources
+    from plan.tasks import load_tasks, upsert_from_source
+
+    cfg = get_config()
+    sources = load_sources(cfg)
+    writable = [s for s in sources if s.is_writable]
+
+    if not writable:
+        click.echo("No writable sources enabled. Check config.toml.")
+        return
+
+    tasks = load_tasks()
+    for src in writable:
+        try:
+            # Pull
+            items = src.fetch()
+            upsert_from_source([i.to_task_dict() for i in items])
+            click.echo(f"Pulled {len(items)} items from {src.name}")
+            # Push
+            src.push(tasks)
+            click.echo(f"Pushed {len(tasks)} tasks to {src.name}")
+        except NotImplementedError:
+            click.echo(f"Source {src.name!r} does not support push, skipping.")
+        except Exception as exc:
+            click.echo(f"Sync error for {src.name!r}: {exc}", err=True)
+
+
+@cli.group("config")
+def config_group():
+    """Manage configuration."""
+
+
+@config_group.command("set")
+@click.argument("key")
+@click.argument("value")
+def config_set(key, value):
+    """Set a config key (dot-separated) to a value.
+
+    Examples:
+      plan config set ai.model claude-sonnet-4-6
+      plan config set schedule.daily_time 07:30
+      plan config set sources.ticktick.enabled true
+    """
+    from plan.config import set_key
+
+    # Coerce common types
+    coerced: object = value
+    if value.lower() == "true":
+        coerced = True
+    elif value.lower() == "false":
+        coerced = False
+    else:
+        try:
+            coerced = int(value)
+        except ValueError:
+            try:
+                coerced = float(value)
+            except ValueError:
+                pass  # keep as string
+
+    set_key(key, coerced)
+    click.echo(f"Set {key} = {coerced!r}")
+
+
+@cli.group()
+def schedule():
+    """Manage Windows Task Scheduler integration."""
+
+
+@schedule.command("install")
+def schedule_install():
+    """Register a daily Task Scheduler entry."""
+    from plan.config import get
+    from plan.scheduler import install, is_installed
+
+    daily_time = get("schedule.daily_time", "08:00")
+    if is_installed():
+        click.echo("Task already installed. Reinstalling...")
+    install(daily_time)
+    click.echo(f"Scheduled daily run at {daily_time}.")
+
+
+@schedule.command("uninstall")
+def schedule_uninstall():
+    """Remove the Task Scheduler entry."""
+    from plan.scheduler import uninstall, is_installed
+
+    if not is_installed():
+        click.echo("Task is not installed.")
+        return
+    uninstall()
+    click.echo("Scheduled task removed.")
+
+
 if __name__ == "__main__":
     cli()
