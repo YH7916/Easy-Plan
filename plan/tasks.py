@@ -96,11 +96,17 @@ def update_task(task_id: str, **kwargs) -> Task | None:
 
 
 def upsert_from_source(items: list[dict]) -> None:
-    """Merge source items into tasks.json by external_id, adding new ones."""
+    """Merge source items into tasks.json by external_id, adding new ones.
+
+    Input items must have a "title" field. The external identifier is read
+    from "external_id" (preferred, from SourceItem.to_task_dict()) or
+    "ticktick_id" (fallback, for direct Task dict input). The identifier
+    is stored as "ticktick_id" in tasks.json.
+    """
     tasks = load_tasks()
     existing_ext_ids = {t.get("ticktick_id") for t in tasks if t.get("ticktick_id")}
     for item in items:
-        ext_id = item.get("external_id")
+        ext_id = item.get("external_id") or item.get("ticktick_id")
         if ext_id and ext_id in existing_ext_ids:
             for task in tasks:
                 if task.get("ticktick_id") == ext_id:
