@@ -23,6 +23,9 @@ def _plan_exe() -> str:
 
 def install(daily_time: str = "08:00") -> None:
     """Register a daily Task Scheduler entry that runs `plan daily`."""
+    import re
+    if not re.fullmatch(r"\d{2}:\d{2}", daily_time):
+        raise ValueError(f"daily_time must be HH:MM (e.g. '08:00'), got {daily_time!r}")
     hour, minute = daily_time.split(":")
     plan_cmd = _plan_exe()
     cmd = [

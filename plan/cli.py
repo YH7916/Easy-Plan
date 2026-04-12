@@ -34,7 +34,17 @@ def chat():
         session_notes.append(f"User: {user_input}\nAssistant: {reply}")
 
     if session_notes:
-        summary = "\n\n".join(session_notes)
+        # Ask Claude to summarize the session into 2-3 sentences before appending
+        raw_transcript = "\n\n".join(session_notes)
+        try:
+            summary_prompt = (
+                f"Summarize this planning conversation in 2-3 concise sentences, "
+                f"focusing on decisions made, tasks identified, and key insights:\n\n{raw_transcript}"
+            )
+            summary, _ = chat_turn(summary_prompt, [])
+        except Exception:
+            # Fallback: use last exchange only to avoid unbounded growth
+            summary = session_notes[-1] if session_notes else ""
         append_context(f"Chat session summary:\n{summary}")
         click.echo("Context updated.")
 
