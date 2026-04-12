@@ -97,5 +97,58 @@ def status():
             click.echo(f"  {done_marker} {t['time_block']}  {t['title']}")
 
 
+@cli.group()
+def task():
+    """Manage tasks."""
+
+
+@task.command("add")
+@click.argument("title")
+@click.option("--project", "-p", default=None, help="Project name")
+@click.option("--due", "-d", default=None, help="Due date (YYYY-MM-DD)")
+@click.option("--priority", "-P", default=0, type=click.IntRange(0, 3),
+              help="Priority 0-3 (0=none, 3=high)")
+def task_add(title, project, due, priority):
+    """Add a new task."""
+    from plan.tasks import add_task
+    t = add_task(title, project=project, due=due, priority=priority)
+    click.echo(f"Added: [{t['id'][:8]}] {t['title']}")
+
+
+@task.command("list")
+@click.option("--all", "show_all", is_flag=True, help="Include done tasks")
+@click.option("--project", "-p", default=None)
+def task_list(show_all, project):
+    """List tasks."""
+    from plan.tasks import list_tasks
+    status = None if show_all else "open"
+    tasks = list_tasks(status=status, project=project)
+    if not tasks:
+        click.echo("No tasks.")
+        return
+    for t in tasks:
+        done = "x" if t.get("status") == "done" else " "
+        tb = f"  [{t['time_block']}]" if t.get("time_block") else ""
+        proj = f"  ({t['project']})" if t.get("project") else ""
+        click.echo(f"[{done}] {t['id'][:8]}  {t['title']}{proj}{tb}")
+
+
+@task.command("done")
+@click.argument("task_id_prefix")
+def task_done(task_id_prefix):
+    """Mark a task as done (by ID prefix)."""
+    from plan.tasks import load_tasks, mark_done
+    tasks = load_tasks()
+    matches = [t for t in tasks if t["id"].startswith(task_id_prefix)]
+    if not matches:
+        click.echo(f"No task found with ID prefix: {task_id_prefix}", err=True)
+        raise SystemExit(1)
+    if len(matches) > 1:
+        click.echo(f"Ambiguous prefix {task_id_prefix!r} matches {len(matches)} tasks.", err=True)
+        raise SystemExit(1)
+    result = mark_done(matches[0]["id"])
+    click.echo(f"Done: {result['title']}")
+
+
 if __name__ == "__main__":
     cli()

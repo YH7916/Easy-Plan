@@ -74,3 +74,41 @@ def test_daily_calls_analyze():
             result = runner.invoke(cli, ["daily"])
     assert result.exit_code == 0
     mock_analyze.assert_called_once()
+
+
+def test_task_add():
+    runner = CliRunner()
+    result = runner.invoke(cli, ["task", "add", "Write essay", "--priority", "2"])
+    assert result.exit_code == 0
+    assert "Write essay" in result.output
+
+
+def test_task_list_empty():
+    runner = CliRunner()
+    result = runner.invoke(cli, ["task", "list"])
+    assert result.exit_code == 0
+    assert "No tasks" in result.output
+
+
+def test_task_list_shows_tasks():
+    runner = CliRunner()
+    runner.invoke(cli, ["task", "add", "Study ML"])
+    result = runner.invoke(cli, ["task", "list"])
+    assert "Study ML" in result.output
+
+
+def test_task_done():
+    runner = CliRunner()
+    runner.invoke(cli, ["task", "add", "Finish lab"])
+    from plan.tasks import load_tasks
+    tasks = load_tasks()
+    prefix = tasks[0]["id"][:8]
+    result = runner.invoke(cli, ["task", "done", prefix])
+    assert result.exit_code == 0
+    assert "Done" in result.output
+
+
+def test_task_done_not_found():
+    runner = CliRunner()
+    result = runner.invoke(cli, ["task", "done", "nonexistent"])
+    assert result.exit_code != 0
