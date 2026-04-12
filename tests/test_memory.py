@@ -5,6 +5,7 @@ import pytest
 def patch_paths(monkeypatch, tmp_path):
     """Redirect profile/context paths to tmp_path."""
     import plan.config as cfg
+    import plan.memory as mem_mod
     if hasattr(cfg, '_cache'):
         cfg._cache = None
     profile_file = tmp_path / "profile.md"
@@ -19,6 +20,8 @@ def patch_paths(monkeypatch, tmp_path):
         return original_resolve(key)
 
     monkeypatch.setattr(cfg, "resolve_path", fake_resolve)
+    # memory.py binds resolve_path at import time via `from plan.config import resolve_path`
+    monkeypatch.setattr(mem_mod, "resolve_path", fake_resolve)
     yield
 
 
