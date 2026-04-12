@@ -1,3 +1,1 @@
-# Daily Context
-
-_No context yet. Run `plan chat` to add context._
+As of April 2026, the core tension is a three-way split between internship execution, research recovery, and career prep — all competing for limited deep-work hours against a backdrop of poor sleep and no margin. The July 2026 big-tech internship deadline is real but not yet critical; the immediate risk is letting the research relationship decay and the LeetCode habit never forming. This week's job is to stop the bleeding on research communication and establish the smallest sustainable daily habits (one LC problem, breakfast, sleep cutoff) before trying to optimize anything else.

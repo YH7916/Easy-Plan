@@ -79,9 +79,34 @@ def analyze():
 
 
 @cli.command()
+def review():
+    """Analyze your full situation and generate long-term/monthly/weekly goals."""
+    from plan.agent import run_review
+    click.echo("Analyzing your situation...")
+    goals = run_review()
+    click.echo("\n" + goals)
+    click.echo("\nGoals saved to data/goals.md")
+
+
+@cli.command("plan")
+def plan_cmd():
+    """Generate today's concrete tasks from your goals and context."""
+    from plan.agent import run_plan
+    click.echo("Generating today's tasks from goals...")
+    tasks = run_plan()
+    open_tasks = [t for t in tasks if t.get("status") == "open"]
+    click.echo(f"Done. {len(open_tasks)} open tasks:")
+    for t in sorted(open_tasks, key=lambda x: -x.get("priority", 0)):
+        proj = f"  [{t['project']}]" if t.get("project") else ""
+        click.echo(f"  {'★' * t.get('priority', 0)}  {t['title']}{proj}")
+
+
+@cli.command()
 def daily():
-    """Run analyze (called by Windows Task Scheduler for daily planning)."""
+    """Full daily routine: plan today's tasks then schedule them. (Task Scheduler calls this)"""
     ctx = click.get_current_context()
+    ctx.invoke(plan_cmd)
+    click.echo()
     ctx.invoke(analyze)
 
 

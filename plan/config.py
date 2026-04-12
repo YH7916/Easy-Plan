@@ -66,12 +66,12 @@ def resolve_path(key: str) -> Path:
 
 
 def api_key() -> str:
-    """Return the Anthropic API key from env."""
+    """Return the Anthropic API key from env (supports ANTHROPIC_API_KEY or ANTHROPIC_AUTH_TOKEN)."""
     env_var = get("ai.api_key_env", "ANTHROPIC_API_KEY")
-    key = os.environ.get(env_var, "")
+    key = os.environ.get(env_var, "") or os.environ.get("ANTHROPIC_AUTH_TOKEN", "")
     if not key:
         raise EnvironmentError(
-            f"Environment variable {env_var} is not set. "
+            f"Neither {env_var} nor ANTHROPIC_AUTH_TOKEN is set. "
             "Add it to .env or export it in your shell."
         )
     return key

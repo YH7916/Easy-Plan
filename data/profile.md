@@ -1,46 +1,58 @@
-# Personal Profile
+# 个人档案
 
-## Identity
-- ZJU (Zhejiang University) sophomore, Computer Science major
-- Currently doing an AI startup internship (part-time, ~3 days/week)
-- Member of a university ML research group
+## 基本信息
+- 浙江大学大二，计算机科学专业
+- 目前在一家AI初创公司实习（兼职，约每周3天）
+- 加入了学校ML科研组
 
-## Career Goals
-- Land a big-tech internship (ByteDance / Alibaba / Tencent / top foreign tech) by July 2026
-- Build strong ML/systems fundamentals to support research and engineering roles
-- Publish or contribute to at least one ML research project this year (大三 target)
-- Long-term: transition from dev roles toward algorithm/ML engineering roles
+## 职业目标
+- **核心目标：2026年7月前拿到大厂AI Agent方向实习**（字节跳动/阿里/腾讯）
+- 长期方向：从开发岗逐步转向算法/ML工程岗
+- 大三目标：在科研组发表或产出至少一篇论文/技术报告
 
-## Current Commitments
-- **Courses:** Core CS sophomore curriculum — OOP, database, computer architecture, algorithms (all this semester)
-- **Internship:** AI startup (very small team) — LLM API benchmarking, tooling, CLI/HTTP integration work
-- **Research:** ML research group — reading d2l, transformer papers, weekly check-ins with mentor (currently behind on tasks)
-- **Self-study:** LeetCode (only ~20-30 problems done so far, need to reach 200+ before interview season), ML theory
+## 大厂AI Agent实习要求（调研结论）
+- **最看重**：实际LLM/Agent项目经验，能讲清楚自己做了什么、遇到什么问题、怎么解决的
+- **算法要求**：中等难度为主（LeetCode Medium），LeetCode Hot 100掌握即可，不需要300+题
+- **技术考察点**：Transformer/Attention机制、RAG系统设计、Agent框架（ReAct、工具调用）、Prompt Engineering、模型评估
+- **加分项**：开源贡献（LangChain/LlamaIndex等）、顶会论文、GitHub项目
+- **GPA不是决定因素**：大厂更看重项目和工程能力
+- **时间线可行**：从现在到7月约3个月，完全够用
 
-## Anxieties & Pressure Points
-- GPA: ranked ~70th percentile, cannot qualify for guaranteed postgrad admission (保研)
-- Parents want me to take the postgrad entrance exam (考研), but I don't want to
-- Career timeline: July 2026 big-tech internship deadline feels tight
-- Internship output feels thin: 2 weeks in, only done packaging script fix and LLM benchmark
-- Research group: 5-6 weeks behind on mentor's study plan, no communication recently
-- Context switching: hard to stay deep on research when internship tasks are urgent
-- Energy: exhausted every evening after internship commute, skipping breakfast, poor sleep
+## 当前实习项目价值分析
+- 当前做的LLM API基准测试+CLI工具**非常相关**，需要好好包装
+- 要量化：测了多少个provider、发现什么性能差异、工具支持哪些功能
+- 要深化：理解评测指标（延迟/吞吐/成本/质量）、记录技术难点和解决方案
+- 要开源：整理成GitHub项目，写详细README
 
-## Working Style
-- Most productive in the morning (08:00-12:00)
-- Needs explicit time blocks to avoid procrastination
-- Tends to vibe-code projects (not deep enough for interview scrutiny)
-- Responds well to concrete daily goals rather than vague to-do lists
-- Struggles with sustained motivation when overwhelmed
+## 当前承诺
+- **课程**：OOP、数据库、计算机体系结构（本学期，目前几乎没听课）
+- **实习**：AI初创公司 — LLM API基准测试、CLI/HTTP工具集成、调查CDN延迟问题
+- **科研**：ML科研组 — 学习d2l、Transformer论文（已落后5-6周，尚未与导师沟通）
+- **自学**：LeetCode Hot 100（目前只做了20-30题）、ML理论
 
-## Values
-- Depth over breadth: would rather understand one thing deeply than skim many
-- Shipping matters: wants to see tangible output from each work session
-- Health: sleep 7-8h target; exercise 3x/week target (currently not meeting either)
+## 压力点
+- GPA约70%分位，无法保研
+- 父母希望考研，本人不想考
+- 实习产出感觉很薄，两周只做了打包脚本修复和LLM基准测试
+- 科研组已5-6周没有任何交流，任务严重落后
+- 每天实习回来很累，不吃早饭，作息差
+- 课程几乎没听，期末补天压力大
 
-## Projects & Areas
-- **internship:** AI startup tasks — current tasks: investigate why CDN is slower, test more API chains, make CLI/HTTP callable as tool by Claude Code
-- **research:** ML research group — catch up on d2l, transformer understanding, re-engage with mentor
-- **courses:** ZJU coursework — OOP, database, computer architecture (all need catch-up before finals)
-- **career:** LeetCode (target 200+ problems), resume polish, interview prep
-- **personal:** health (sleep, exercise, breakfast), life admin
+## 工作风格
+- 上午效率最高（08:00-12:00）
+- 需要明确的时间块才能避免拖延
+- 倾向于vibe coding，项目经不住面试深挖
+- 具体的每日目标比模糊的待办清单更有效
+- 压力大时容易失去动力
+
+## 价值观
+- 深度优于广度：宁愿深入理解一件事
+- 重视产出：每次工作要有看得见的成果
+- 健康：目标睡7-8小时、每周健身3次（目前都没达到）
+
+## 项目方向
+- **internship（实习）**：AI初创公司 — 调查CDN延迟、测试更多API链路、让CLI/HTTP可被Claude Code调用
+- **research（科研）**：ML科研组 — 补d2l、理解Transformer、重新联系导师
+- **courses（课程）**：OOP、数据库、计算机体系结构（期末前需要补课）
+- **career（求职）**：LeetCode Hot 100、简历打磨、面试准备
+- **personal（个人）**：健康（睡眠、健身、早饭）、生活管理

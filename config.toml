@@ -11,7 +11,7 @@ run_on_missed = true
 [sources.ticktick]
 enabled = false
 writable = true
-username = ""
+username_env = "TICKTICK_USERNAME"
 password_env = "TICKTICK_PASSWORD"
 
 [sources.school]
