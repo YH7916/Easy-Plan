@@ -1,0 +1,137 @@
+"""Agent core: build prompt, call Claude, parse response."""
+from __future__ import annotations
+
+import json
+import re
+from pathlib import Path
+from typing import Any
+
+import anthropic
+
+from plan.config import get, api_key
+from plan.memory import read_profile, read_context, write_context
+from plan.tasks import load_tasks, save_tasks, Task
+
+_PROMPT_PATH = Path(__file__).parent / "prompts" / "analyze.txt"
+
+
+def _load_prompt_template() -> str:
+    return _PROMPT_PATH.read_text(encoding="utf-8")
+
+
+def build_prompt(
+    profile: str,
+    context: str,
+    tasks: list[Task],
+    extra_items: list[dict] | None = None,
+) -> str:
+    """Render the analyze prompt with current data."""
+    template = _load_prompt_template()
+    tasks_json = json.dumps(tasks, indent=2, ensure_ascii=False)
+    extra_json = json.dumps(extra_items or [], indent=2, ensure_ascii=False)
+    return (
+        template
+        .replace("{{PROFILE}}", profile)
+        .replace("{{CONTEXT}}", context)
+        .replace("{{TASKS_JSON}}", tasks_json)
+        .replace("{{EXTRA_ITEMS_JSON}}", extra_json)
+    )
+
+
+def call_claude(prompt: str) -> str:
+    """Send prompt to Claude and return the raw text response."""
+    client = anthropic.Anthropic(api_key=api_key())
+    model = get("ai.model", "claude-sonnet-4-6")
+    message = client.messages.create(
+        model=model,
+        max_tokens=4096,
+        messages=[{"role": "user", "content": prompt}],
+    )
+    return message.content[0].text
+
+
+def parse_response(response: str) -> tuple[str, list[Task]]:
+    """Extract updated context and time-blocked tasks from Claude response.
+
+    Expected response format:
+        <context>
+        ...updated context.md content...
+        </context>
+
+        <tasks>
+        [{"id": "...", "time_block": "09:00-10:30", ...}, ...]
+        </tasks>
+
+    Returns:
+        (new_context_text, list_of_task_dicts_with_time_block)
+    """
+    context_match = re.search(r"<context>(.*?)</context>", response, re.DOTALL)
+    tasks_match = re.search(r"<tasks>(.*?)</tasks>", response, re.DOTALL)
+
+    new_context = context_match.group(1).strip() if context_match else ""
+
+    tasks: list[Task] = []
+    if tasks_match:
+        try:
+            tasks = json.loads(tasks_match.group(1).strip())
+        except json.JSONDecodeError:
+            tasks = []
+
+    return new_context, tasks
+
+
+def run_analyze(extra_items: list[dict] | None = None) -> list[Task]:
+    """Full analyze cycle: read data, call Claude, write results back.
+
+    Returns the updated task list with time_block fields set.
+    """
+    profile = read_profile()
+    context = read_context()
+    tasks = load_tasks()
+
+    prompt = build_prompt(profile, context, tasks, extra_items)
+    response = call_claude(prompt)
+    new_context, updated_tasks = parse_response(response)
+
+    if new_context:
+        write_context(new_context)
+
+    # Merge time_block values back into the main task list
+    time_blocks: dict[str, str] = {
+        t["id"]: t.get("time_block", "")
+        for t in updated_tasks
+        if t.get("id") and t.get("time_block")
+    }
+    for task in tasks:
+        if task["id"] in time_blocks:
+            task["time_block"] = time_blocks[task["id"]]
+
+    save_tasks(tasks)
+    return tasks
+
+
+def chat_turn(user_message: str, history: list[dict]) -> tuple[str, list[dict]]:
+    """Single chat turn: append user message, call Claude, return reply + updated history.
+
+    history is a list of {"role": "user"|"assistant", "content": str} dicts.
+    """
+    client = anthropic.Anthropic(api_key=api_key())
+    model = get("ai.model", "claude-sonnet-4-6")
+
+    system = (
+        "You are a personal planning assistant. "
+        "Help the user reflect on their goals, tasks, and schedule. "
+        "Be concise and actionable. "
+        f"Current profile:\n{read_profile()}\n\nCurrent context:\n{read_context()}"
+    )
+
+    history = history + [{"role": "user", "content": user_message}]
+    message = client.messages.create(
+        model=model,
+        max_tokens=1024,
+        system=system,
+        messages=history,
+    )
+    reply = message.content[0].text
+    history = history + [{"role": "assistant", "content": reply}]
+    return reply, history
