@@ -66,6 +66,7 @@ def register(cls: type[BaseSource]) -> type[BaseSource]:
 def load_sources(config: dict) -> list[BaseSource]:
     """Instantiate all enabled sources from config['sources']."""
     from plan.sources.shell import ShellSource  # noqa: F401 — triggers registration
+    from plan.sources.lazy_zju import LazyZJUSource  # noqa: F401
 
     sources_cfg = config.get("sources", {})
     result: list[BaseSource] = []

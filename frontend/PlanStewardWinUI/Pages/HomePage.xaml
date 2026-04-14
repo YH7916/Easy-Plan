@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Page
+    x:Class="PlanStewardWinUI.Pages.HomePage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Loaded="Page_Loaded">
+
+    <ScrollViewer>
+        <StackPanel Padding="32,24,32,48" Spacing="20">
+            <StackPanel Spacing="4">
+                <TextBlock FontSize="28" FontWeight="SemiBold" Text="Plan Steward" />
+            </StackPanel>
+
+            <CommandBar DefaultLabelPosition="Right">
+                <AppBarButton Icon="Refresh" Label="Refresh" Click="Refresh_Click" />
+            </CommandBar>
+
+            <Grid ColumnSpacing="16">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <Border Grid.Column="0" Padding="16" CornerRadius="8" Background="{ThemeResource LayerFillColorDefaultBrush}">
+                    <StackPanel Spacing="6">
+                        <TextBlock FontSize="14" Opacity="0.68" Text="Open Tasks" />
+                        <TextBlock x:Name="OpenTaskCountText" FontSize="28" FontWeight="SemiBold" Text="-" />
+                    </StackPanel>
+                </Border>
+
+                <Border Grid.Column="1" Padding="16" CornerRadius="8" Background="{ThemeResource LayerFillColorDefaultBrush}">
+                    <StackPanel Spacing="6">
+                        <TextBlock FontSize="14" Opacity="0.68" Text="High Priority" />
+                        <TextBlock x:Name="HighPriorityCountText" FontSize="28" FontWeight="SemiBold" Text="-" />
+                    </StackPanel>
+                </Border>
+
+                <Border Grid.Column="2" Padding="16" CornerRadius="8" Background="{ThemeResource LayerFillColorDefaultBrush}">
+                    <StackPanel Spacing="6">
+                        <TextBlock FontSize="14" Opacity="0.68" Text="Pending Intake" />
+                        <TextBlock x:Name="PendingIntakeCountText" FontSize="28" FontWeight="SemiBold" Text="-" />
+                    </StackPanel>
+                </Border>
+            </Grid>
+
+            <Border Padding="18" CornerRadius="8" Background="{ThemeResource LayerFillColorDefaultBrush}">
+                <StackPanel Spacing="8">
+                    <TextBlock FontSize="16" FontWeight="SemiBold" Text="Daily Brief" />
+                    <TextBlock x:Name="DailyBriefText" FontSize="14" Text="Loading..." TextWrapping="Wrap" />
+                </StackPanel>
+            </Border>
+
+            <Grid ColumnSpacing="16">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <Border Grid.Column="0" Padding="18" CornerRadius="8" Background="{ThemeResource LayerFillColorDefaultBrush}">
+                    <StackPanel Spacing="8">
+                        <TextBlock FontSize="16" FontWeight="SemiBold" Text="Next Actions" />
+                        <ListView x:Name="NextActionsList" MinHeight="160" />
+                        <StackPanel x:Name="RecommendedActionsPanel" Spacing="10" />
+                    </StackPanel>
+                </Border>
+
+                <Border Grid.Column="1" Padding="18" CornerRadius="8" Background="{ThemeResource LayerFillColorDefaultBrush}">
+                    <StackPanel Spacing="8">
+                        <TextBlock FontSize="16" FontWeight="SemiBold" Text="Focus Context" />
+                        <ListView x:Name="FocusAppsList" MinHeight="160" />
+                    </StackPanel>
+                </Border>
+            </Grid>
+        </StackPanel>
+    </ScrollViewer>
+</Page>

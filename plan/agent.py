@@ -160,12 +160,19 @@ def chat_turn(user_message: str, history: list[dict]) -> tuple[str, list[dict]]:
 _REVIEW_PROMPT_PATH = Path(__file__).parent / "prompts" / "review.txt"
 _PLAN_PROMPT_PATH = Path(__file__).parent / "prompts" / "plan.txt"
 _GOALS_PATH = Path(__file__).parent.parent / "data" / "goals.md"
+_LAB_TASKS_PATH = Path(__file__).parent.parent / "data" / "lab_tasks.md"
 
 
 def read_goals() -> str:
     if not _GOALS_PATH.exists():
         return ""
     return _GOALS_PATH.read_text(encoding="utf-8")
+
+
+def read_lab_tasks() -> str:
+    if not _LAB_TASKS_PATH.exists():
+        return ""
+    return _LAB_TASKS_PATH.read_text(encoding="utf-8")
 
 
 def write_goals(content: str) -> None:
@@ -187,6 +194,7 @@ def run_review() -> str:
         .replace("{{PROFILE}}", read_profile())
         .replace("{{CONTEXT}}", read_context())
         .replace("{{GOALS}}", read_goals())
+        .replace("{{LAB_TASKS}}", read_lab_tasks())
         .replace("{{TODAY}}", today)
     )
 
@@ -221,6 +229,7 @@ def run_plan() -> list[Task]:
         .replace("{{PROFILE}}", read_profile())
         .replace("{{CONTEXT}}", read_context())
         .replace("{{GOALS}}", read_goals())
+        .replace("{{LAB_TASKS}}", read_lab_tasks())
         .replace("{{TASKS_JSON}}", json.dumps(open_tasks, indent=2, ensure_ascii=False))
         .replace("{{TODAY}}", today)
     )

@@ -47,6 +47,7 @@ def add_task(
     due: str | None = None,
     priority: int = 0,
     source: str = "local",
+    ticktick_id: str | None = None,
 ) -> Task:
     task: Task = {
         "id": str(uuid.uuid4()),
@@ -56,7 +57,7 @@ def add_task(
         "priority": priority,
         "status": "open",
         "source": source,
-        "ticktick_id": None,
+        "ticktick_id": ticktick_id,
         "time_block": None,
     }
     tasks = load_tasks()
