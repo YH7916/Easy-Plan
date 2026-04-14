@@ -5,4 +5,10 @@ __pycache__/
 .pytest_cache/
 dist/
 build/
+**/bin/
+**/obj/
 config.toml
+*.log
+temp-*.json
+data/
+app-run.*.txt

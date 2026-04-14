@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "PlanStewardWinUI (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "PlanStewardWinUI (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}

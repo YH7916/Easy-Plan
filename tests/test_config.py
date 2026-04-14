@@ -46,6 +46,8 @@ def test_api_key_missing(monkeypatch):
     monkeypatch.chdir("D:/Plan")
     import plan.config as cfg
     cfg._cache = None
+    monkeypatch.setattr(cfg, "load_dotenv", lambda *args, **kwargs: None)
     monkeypatch.delenv("ANTHROPIC_API_KEY", raising=False)
+    monkeypatch.delenv("ANTHROPIC_AUTH_TOKEN", raising=False)
     with pytest.raises(EnvironmentError):
         cfg.api_key()

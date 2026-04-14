@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Page
+    x:Class="PlanStewardWinUI.Pages.SettingsPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Loaded="Page_Loaded">
+
+    <ScrollViewer>
+        <StackPanel Padding="32,24,32,48" Spacing="20">
+            <StackPanel Spacing="4">
+                <TextBlock FontSize="28" FontWeight="SemiBold" Text="Settings" />
+                <TextBlock Opacity="0.72" Text="Configure adapters and backend connection." TextWrapping="Wrap" />
+            </StackPanel>
+
+            <CommandBar DefaultLabelPosition="Right">
+                <AppBarButton x:Name="RefreshButton" Icon="Refresh" Label="Refresh" Click="Refresh_Click" />
+                <AppBarButton x:Name="SaveButton" Icon="Save" Label="Save" Click="Save_Click" />
+            </CommandBar>
+
+            <Border Padding="18" CornerRadius="8" Background="{ThemeResource LayerFillColorDefaultBrush}">
+                <StackPanel x:Name="ConfigFormPanel" Spacing="12">
+                    <StackPanel Spacing="4">
+                        <TextBlock FontSize="16" FontWeight="SemiBold" Text="Backend Configuration" />
+                            </StackPanel>
+
+                    <InfoBar x:Name="ConfigStatusBar" IsClosable="False" IsOpen="False" />
+
+                    <TextBox x:Name="WorkReviewRootBox" Header="Work Review root" PlaceholderText="C:\Users\Yohaku\AppData\Roaming\work-review" />
+                    <TextBox x:Name="ObsidianVaultRootBox" Header="Obsidian vault root" PlaceholderText="D:\Vault" />
+                    <TextBox x:Name="ObsidianGeneratedDirBox" Header="Generated folder inside vault" PlaceholderText="Steward/Daily" />
+                    <NumberBox
+                        x:Name="CheckInHoursBox"
+                        Header="Automation check-in cadence (hours)"
+                        Minimum="1"
+                        Maximum="24"
+                        SmallChange="1"
+                        LargeChange="1"
+                        SpinButtonPlacementMode="Inline" />
+                </StackPanel>
+            </Border>
+
+            <Border Padding="18" CornerRadius="8" Background="{ThemeResource LayerFillColorDefaultBrush}">
+                <StackPanel Spacing="12">
+                    <TextBlock FontSize="16" FontWeight="SemiBold" Text="Detected Obsidian Vaults" />
+                    <StackPanel x:Name="DetectedVaultsPanel" Spacing="8" />
+                </StackPanel>
+            </Border>
+
+            <Border Padding="18" CornerRadius="8" Background="{ThemeResource LayerFillColorDefaultBrush}">
+                <StackPanel Spacing="8">
+                    <TextBlock FontSize="16" FontWeight="SemiBold" Text="Connection" />
+                    <TextBlock x:Name="BackendUrlText" Opacity="0.72" TextWrapping="Wrap" />
+                    <TextBlock x:Name="WorkReviewRootText" Opacity="0.72" TextWrapping="Wrap" />
+                    <TextBlock x:Name="ObsidianRootText" Opacity="0.72" TextWrapping="Wrap" />
+                </StackPanel>
+            </Border>
+
+            <Border Padding="18" CornerRadius="8" Background="{ThemeResource LayerFillColorDefaultBrush}">
+                <StackPanel Spacing="8">
+                    <TextBlock FontSize="16" FontWeight="SemiBold" Text="Automation" />
+                    <TextBlock x:Name="AutomationModeText" Opacity="0.72" TextWrapping="Wrap" />
+                    <TextBlock x:Name="AutomationInterventionCountText" Opacity="0.72" TextWrapping="Wrap" />
+                </StackPanel>
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</Page>
